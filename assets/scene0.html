@@ -22,78 +22,23 @@
         </div>
         <div class="row">
             <div class="col-sm">
-                Every year people come to the United States seeking protection because they have suffered persecution or fear that they will suffer persecution due to:
-
-Race
-Religion
-Nationality
-Membership in a particular social group
-Political opinion
+                <h2>Asylum in the United States</h2>
+                <p>Every year people come to the United States seeking
+                    protection because they have suffered persecution or fear
+                    that they will suffer persecution due to:
+                </p>
+                <ul>
+                    <li>Race</li>
+                    <li>Religion</li>
+                    <li>Nationality</li>
+                    <li>Membership in a particular social group</li>
+                    <li>Political opinion</li>
+                </ul>
             </div>
             <div class="col" id="chart"></div>
         </div>
     </div>
     <script>
-
-        const margin = { top: 10, right: 30, bottom: 30, left: 60 },
-            width = 600 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
-
-        const svg = d3.select("#chart")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        const x = d3.scaleLinear()
-            .domain([1990, 2019])
-            .range([0, width]);
-        svg.append("g")
-            .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(x));
-
-        const y = d3.scaleLinear()
-            .domain([0, 50000])
-            .range([height, 0]);
-        svg.append("g")
-            .call(d3.axisLeft(y));
-
-        async function main() {
-
-            const data = await d3.csv("https://raw.githubusercontent.com/liyuan31/DataVizProject/master/data/asylum_90_to_19.csv");
-
-            render(data.filter(d => d.Year < 2002));
-
-            // setTimeout( ()=> {
-            //     render(data.filter(d=>d.Year<2011))
-            // } , 3000)
-
-            // setTimeout( ()=> {
-            //     render(data.filter(d=>d.Year<2016))
-            // } , 6000)
-
-        }
-
-        const render = data => {
-
-            svg.selectAll(".line").remove();
-
-            svg.append("path").datum(data)
-                .transition().duration(1000)
-                .attr("class", "line")
-                .attr("fill", "none")
-                .attr("stroke", "steelblue")
-                .attr("stroke-width", 1.5)
-                .attr("d", d3.line()
-                    .x(d => x(d.Year))
-                    .y(d => y(d.Total))
-                )
-
-        };
-
-        main();
-
     </script>
 </body>
 
