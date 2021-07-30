@@ -11,8 +11,8 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <!-- D3 -->
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <title>Scene 0</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <title>Scene 1</title>
 </head>
 
 <body>
@@ -65,21 +65,20 @@ Political opinion
 
             render(data.filter(d => d.Year < 2002));
 
-            // setTimeout( ()=> {
-            //     render(data.filter(d=>d.Year<2011))
-            // } , 3000)
+            setTimeout( ()=> {
+                render(data.filter(d=>d.Year<2011))
+            } , 3000)
 
-            // setTimeout( ()=> {
-            //     render(data.filter(d=>d.Year<2016))
-            // } , 6000)
+            setTimeout( ()=> {
+                render(data.filter(d=>d.Year<2016))
+            } , 6000)
 
         }
 
         const render = data => {
 
-            svg.selectAll(".line").remove();
-
-            svg.append("path").datum(data)
+            const line = svg.selectAll(".line").data([data]);
+            line.join("path")
                 .transition().duration(1000)
                 .attr("class", "line")
                 .attr("fill", "none")
