@@ -127,7 +127,7 @@
             .range([height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y));
-        
+
         // Controller functions
         const overlayOn = () => {
             d3.select("#overlay").style("display", "block")
@@ -137,7 +137,7 @@
         }
 
         // Chart rendering functions
-        const render = data => {
+        const renderChart = data => {
 
             const line = svg.selectAll(".line").data([data]);
             line.join("path")
@@ -157,7 +157,8 @@
             d3.select("#text").remove();
             text = d3.select("#text-container").append("div").attr("id", "text");
             if (scene === 1) {
-
+                text.append("p")
+                    .html("Every year people come to the United States seeking protection because they have suffered persecution or fear that they will suffer persecution due to:");
             }
             if (scene === 2) {
                 text.remove();
@@ -198,13 +199,13 @@
 
         const updateChart = () => {
             if (scene === 2) {
-                render(data.filter(d => d.Year < 2002));
+                renderChart(data.filter(d => d.Year < 2002));
             } else if (scene === 3) {
-                render(data.filter(d => d.Year < 2011));
+                renderChart(data.filter(d => d.Year < 2011));
             } else if (scene === 4) {
-                render(data.filter(d => d.Year < 2017));
+                renderChart(data.filter(d => d.Year < 2017));
             } else if (scene === 5) {
-                render(data);
+                renderChart(data);
             }
         }
 
