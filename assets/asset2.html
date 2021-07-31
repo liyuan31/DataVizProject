@@ -127,9 +127,7 @@
             .range([height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y));
-
-        const text = d3.select("#text");
-
+        
         // Controller functions
         const overlayOn = () => {
             d3.select("#overlay").style("display", "block")
@@ -156,10 +154,10 @@
         };
 
         const updateText = () => {
-            text.remove();
+            d3.select("#text").remove();
             text = d3.select("#text-container").append("div").attr("id", "text");
             if (scene === 1) {
-                
+
             }
             if (scene === 2) {
                 text.remove();
