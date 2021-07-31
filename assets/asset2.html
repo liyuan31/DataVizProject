@@ -24,16 +24,16 @@
         </div>
         <div class="btn-group">
             <button type="button" id="btn_previous" class="btn btn-light" onclick="previousScene()">&lt;</button>
-            <button type="button" id="s_1" class="btn btn-dark">1</button>
-            <button type="button" id="s_2" class="btn btn-light">2</button>
-            <button type="button" id="s_3" class="btn btn-light">3</button>
-            <button type="button" id="s_4" class="btn btn-light">4</button>
-            <button type="button" id="s_5" class="btn btn-light">5</button>
-            <button type="button" id="s_6" class="btn btn-light">6</button>
+            <button type="button" id="s_1" class="btn btn-dark" onclick="updateScene(1)">1</button>
+            <button type="button" id="s_2" class="btn btn-light" onclick="updateScene(2)">2</button>
+            <button type="button" id="s_3" class="btn btn-light" onclick="updateScene(3)">3</button>
+            <button type="button" id="s_4" class="btn btn-light" onclick="updateScene(4)">4</button>
+            <button type="button" id="s_5" class="btn btn-light" onclick="updateScene(5)">5</button>
+            <button type="button" id="s_6" class="btn btn-light" onclick="updateScene(6)">6</button>
             <button type="button" id="btn_next" class="btn btn-light" onclick="nextScene()">&gt;</button>
         </div>
         <div class="row">
-            <div class="col-sm">
+            <div class="col-sm" id="text" style="transition: 100ms;">
                 <p>Every year people come to the United States seeking
                     protection because they have suffered persecution or fear
                     that they will suffer persecution due to:
@@ -57,6 +57,8 @@
 
         let data;
 
+
+        // Create chart and d3 selections
         const margin = { top: 10, right: 30, bottom: 30, left: 60 },
             width = 600 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
@@ -81,6 +83,9 @@
         svg.append("g")
             .call(d3.axisLeft(y));
 
+        const text = d3.select("#text");
+        
+        // Functions
         const render = data => {
 
             const line = svg.selectAll(".line").data([data]);
@@ -97,19 +102,32 @@
 
         };
 
+        const updateText = () => {
+            if (scene === 2) {
+                text.selectAll("p").remove();
+            }
+        }
+
         const updateBtn = () => {
             // Make previous scene button light
             d3.selectAll(".btn-dark").attr("class", "btn btn-light");
             // Make current scene button dark
             d3.select(`#s_${scene}`).attr("class", "btn btn-dark");
+        };
+
+        const updateScene = (i=undefined) => {
+            if (i !== undefined) {
+                scene = i;
+            }
+            updateBtn();
+            updateChart();
         }
 
         const nextScene = () => {
             if (scene < nScene) {
                 scene++;
                 console.log(scene)
-                updateBtn();
-                updateChart();
+                updateScene();
             }
         }
 
@@ -117,8 +135,7 @@
             if (scene > 1) {
                 scene--;
                 console.log(scene)
-                updateBtn();
-                updateChart();
+                updateScene();
             }
         }
 
@@ -143,13 +160,12 @@
         setTimeout(() => {
             if (scene === 1) {
                 scene++;
-                updateBtn();
-                updateChart();
+                updateScene();
             }
         }, 3000);
 
     </script>
-    
+
 </body>
 
 </html>
