@@ -67,18 +67,20 @@
             <button type="button" id="btn_next" class="btn btn-light" onclick="nextScene()">&gt;</button>
         </div>
         <div class="row">
-            <div class="col-sm" id="text" style="transition: 100ms;">
-                <p>Every year people come to the United States seeking
-                    protection because they have suffered persecution or fear
-                    that they will suffer persecution due to:
-                </p>
-                <ul>
-                    <li>Race</li>
-                    <li>Religion</li>
-                    <li>Nationality</li>
-                    <li>Membership in a particular social group</li>
-                    <li>Political opinion</li>
-                </ul>
+            <div class="col-sm" id="text-container">
+                <div id="text">
+                    <p>Every year people come to the United States seeking
+                        protection because they have suffered persecution or fear
+                        that they will suffer persecution due to:
+                    </p>
+                    <ul>
+                        <li>Race</li>
+                        <li>Religion</li>
+                        <li>Nationality</li>
+                        <li>Membership in a particular social group</li>
+                        <li>Political opinion</li>
+                    </ul>
+                </div>
             </div>
             <div class="col" id="chart"></div>
         </div>
@@ -154,8 +156,13 @@
         };
 
         const updateText = () => {
+            text.remove();
+            text = d3.select("#text-container").append("div").attr("id", "text");
+            if (scene === 1) {
+                
+            }
             if (scene === 2) {
-                text.selectAll("p").remove();
+                text.remove();
             }
         }
 
@@ -171,6 +178,7 @@
                 scene = i;
             }
             updateBtn();
+            updateText();
             updateChart();
         }
 
