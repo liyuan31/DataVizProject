@@ -12,14 +12,48 @@
         crossorigin="anonymous"></script>
     <!-- D3 -->
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        #overlay {
+            position: fixed;
+            /* Sit on top of the page content */
+            display: none;
+            /* Hidden by default */
+            width: 100%;
+            /* Full width (cover the whole page) */
+            height: 100%;
+            /* Full height (cover the whole page) */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Black background with opacity */
+            z-index: 2;
+            /* Specify a stack order in case you're using a different order for other elements */
+            cursor: pointer;
+            /* Add a pointer on hover */
+        }
+    </style>
     <title>Scene 1</title>
 </head>
 
 <body>
+    <div id="overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col" style="text-align: center;">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="overlayOff()">Go Back</button>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="row" id="popup"></div>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col" id="title">
-                <h2>Asylum in the United States</h2>
+                <h2></h2>
             </div>
         </div>
         <div class="btn-group">
@@ -51,6 +85,8 @@
     </div>
     <script>
 
+        const titleText = "30 Years of Asylum in the United States";
+
         const nScene = 6;
 
         let scene = 1;
@@ -64,6 +100,13 @@
             height = 400 - margin.top - margin.bottom;
 
         const svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const popup = d3.select("#popup")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -84,8 +127,16 @@
             .call(d3.axisLeft(y));
 
         const text = d3.select("#text");
-        
-        // Functions
+
+        // Controller functions
+        const overlayOn = () => {
+            d3.select("#overlay").style("display", "block")
+        }
+        const overlayOff = () => {
+            d3.select("#overlay").style("display", "none");
+        }
+
+        // Chart rendering functions
         const render = data => {
 
             const line = svg.selectAll(".line").data([data]);
@@ -115,7 +166,7 @@
             d3.select(`#s_${scene}`).attr("class", "btn btn-dark");
         };
 
-        const updateScene = (i=undefined) => {
+        const updateScene = (i = undefined) => {
             if (i !== undefined) {
                 scene = i;
             }
@@ -145,14 +196,16 @@
             } else if (scene === 3) {
                 render(data.filter(d => d.Year < 2011));
             } else if (scene === 4) {
-                render(data.filter(d => d.Year < 2016));
+                render(data.filter(d => d.Year < 2017));
             } else if (scene === 5) {
                 render(data);
             }
         }
 
         async function main() {
+            d3.select("#title").select("h2").html("Loading data ...");
             data = await d3.csv("https://raw.githubusercontent.com/liyuan31/DataVizProject/master/data/asylum_90_to_19.csv");
+            d3.select("#title").select("h2").html(titleText);
         }
 
         main();
