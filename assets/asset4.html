@@ -86,7 +86,6 @@
             <button type="button" id="s_3" class="btn btn-light" onclick="updateScene(3)">3</button>
             <button type="button" id="s_4" class="btn btn-light" onclick="updateScene(4)">4</button>
             <button type="button" id="s_5" class="btn btn-light" onclick="updateScene(5)">5</button>
-            <button type="button" id="s_6" class="btn btn-light" onclick="updateScene(6)">6</button>
             <button type="button" id="btn_next" class="btn btn-light" onclick="nextScene()">&gt;</button>
         </div>
         <div class="row">
@@ -112,7 +111,7 @@
 
         const titleText = "30 Years of Asylum in the United States";
 
-        const nScene = 6;
+        const nScene = 5;
 
         let scene = 1;
 
@@ -208,12 +207,16 @@
         };
 
         const updateActiveYear = () => {
-            if (scene === 2) {
+            if (scene === 1) {
+                newestActiveYear = 1989;
+            } else if (scene === 2) {
                 newestActiveYear = 2001;
             } else if (scene === 3) {
                 newestActiveYear = 2008;
             } else if (scene === 4) {
-                newestActiveYear = 2020;
+                newestActiveYear = 2016;
+            } else if (scene === 5) {
+                newestActiveYear = 2019;
             }
             newestActiveYearIndex = newestActiveYear - 1990;
         }
