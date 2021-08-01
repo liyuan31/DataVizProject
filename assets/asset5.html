@@ -164,7 +164,7 @@
 
             // Legend
             if (d3.select("#pie_chart_legend_0").empty()) {
-                const labelHeight = 14;
+                const labelHeight = 12;
                 const legend = pieChart.append('g')
                     .attr("id", "pie_chart_legend_0")
                     .attr('transform', `translate(${pieOuterRadius + 15},${-pieOuterRadius * 0.8})`);
@@ -217,7 +217,7 @@
 
             // Legend
             if (d3.select("#pie_chart_legend_1").empty()) {
-                const labelHeight = 14;
+                const labelHeight = 12;
                 const legend = pieChart1.append('g')
                     .attr("id", "pie_chart_legend_1")
                     .attr('transform', `translate(${pieOuterRadius + 15},${-pieOuterRadius * 0.8})`);
@@ -244,6 +244,21 @@
                     .attr('y', (_, i) => labelHeight * i * 1.8 + labelHeight)
                     .style('font-family', 'sans-serif')
                     .style('font-size', `${labelHeight}px`);
+            }
+
+            // Footnote
+            if (d3.select("#pie_chart_1_footnote").empty()) {
+                pieChart1.append("g").attr("id", "pie_chart_1_footnote")
+                    .selectAll(null)
+                    .data(
+                        ["Note: Defensive asylum occurs when",
+                        " someone requests asylum to prevent",
+                        "removal from the United States."])
+                    .enter().append("text")
+                        .text(d => d)
+                        .style("font-size", "10pt")
+                        .attr("x", 100)
+                        .attr("y", (_,i) => 50 + i * 14)
             }
 
         }
