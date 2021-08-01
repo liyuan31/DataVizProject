@@ -233,7 +233,7 @@
         const updatePieChart = () => {
             const d = data[currentActiveYear-1990];
             renderPieChart(
-                [d.Africa, d.Asia, d.NorthAmerica]
+                [d.Africa,d.Asia,d.Europe,d.NorthAmerica,d.Oceania,d.SouthAmerica,d.Unknown]
             );
         }
 
@@ -245,7 +245,6 @@
             updateText();
             updateActiveYear();
             updateChart();
-            renderPieChart([7, 31, 9, 22, 5, 12]);
         }
 
         // Button callbacks
@@ -314,6 +313,9 @@
             if (d.Year > newestActiveYear) {
                 focus.style("display", "none");
                 return 0;
+            } else {
+                currentActiveYear = d.Year;
+                updatePieChart();
             }
 
             const transX = (year) => {
