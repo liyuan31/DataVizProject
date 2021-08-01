@@ -108,11 +108,14 @@
         let data;
 
 
-        // Create chart and d3 selections
+        // Chart parameters
         const margin = { top: 30, right: 60, bottom: 30, left: 60 },
             width = 700 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
-
+        const pieInnerRadius = 20;
+        const pieOuterRadius = 100;
+        
+        // Create charts and d3 selections
         const svg = d3.select("#chart")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -125,7 +128,7 @@
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+            .attr("transform", `translate(${pieOuterRadius},${pieOuterRadius})`);
 
         const x = d3.scaleLinear()
             .domain([1990, 2019])
@@ -159,19 +162,16 @@
 
     const renderPieChart = data => {
 
-        const g = pieChart.append("g")
-               .attr("transform", "translate(150,120)");
-
         // Creating Pie generator
         const pie = d3.pie();
 
         // Creating arc
         const arc = d3.arc()
-            .innerRadius(0)
-            .outerRadius(100);
+            .innerRadius(pieInnerRadius)
+            .outerRadius(pieOuterRadius);
 
         // Grouping different arcs
-        const arcs = g.selectAll("arc")
+        const arcs = pieChart.selectAll("arc")
             .data(pie(data))
             .enter()
             .append("g");
