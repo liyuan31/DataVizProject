@@ -182,7 +182,7 @@
                     let value = data.data;
                     return d3.schemeSet3[i];
                 })
-                .attr("d", arc);
+                .attr("d", arc)
         }
 
         // Update display elements by scene parameter
@@ -233,7 +233,7 @@
         const updatePieChart = () => {
             const d = data[currentActiveYear-1990];
             renderPieChart(
-                [d.Africa,d.Asia,d.Europe,d.NorthAmerica,d.Oceania,d.SouthAmerica,d.Unknown]
+                [d.Asia,d.Africa,d.SouthAmerica,d.Europe,d.NorthAmerica,d.Oceania,d.Unknown]
             );
         }
 
