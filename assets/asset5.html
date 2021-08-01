@@ -57,7 +57,10 @@
         </div>
         <div class="row">
             <div class="col" id="chart"></div>
-            <div class="col-sm" id="pie-chart"></div>
+            <div class="col-sm">
+                <div class="row" id="pie-chart"></div>
+                <div class="row" id="pie-chart-1"></div>
+            </div>
         </div>
     </div>
     <script>
@@ -79,8 +82,8 @@
         const margin = { top: 30, right: 60, bottom: 30, left: 60 },
             width = 700 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
-        const pieInnerRadius = 60;
-        const pieOuterRadius = 100;
+        const pieInnerRadius = 50;
+        const pieOuterRadius = 90;
 
         // Create charts and d3 selections
         const svg = d3.select("#chart")
@@ -92,8 +95,15 @@
 
         const pieChart = d3.select("#pie-chart")
             .append("svg")
-            .attr("width", 200 + margin.left + margin.right)
-            .attr("height", 200 + margin.top + margin.bottom)
+            .attr("width", 320)
+            .attr("height", 220)
+            .append("g")
+            .attr("transform", `translate(${pieOuterRadius},${pieOuterRadius})`);
+
+        const pieChart1 = d3.select("#pie-chart-1")
+            .append("svg")
+            .attr("width", 320)
+            .attr("height", 220)
             .append("g")
             .attr("transform", `translate(${pieOuterRadius},${pieOuterRadius})`);
 
@@ -132,6 +142,7 @@
 
         };
 
+        // Region pie chart renderer
         const renderPieChart = data => {
 
             // Creating Pie generator
@@ -153,9 +164,8 @@
 
             // Legend
             if (d3.select("#pie_chart_legend_0").empty()) {
-                const labelHeight = 10;
-                const legend = pieChart
-                    .append('g')
+                const labelHeight = 14;
+                const legend = pieChart.append('g')
                     .attr("id", "pie_chart_legend_0")
                     .attr('transform', `translate(${pieOuterRadius + 15},${-pieOuterRadius * 0.8})`);
 
@@ -167,13 +177,66 @@
                     .attr('y', (_, i) => labelHeight * i * 1.8)
                     .attr('width', labelHeight)
                     .attr('height', labelHeight)
-                    .attr('fill', d => d3.schemeSet3[d.index])
+                    .attr('fill', (_, i) => d3.schemeSet3[i])
                     .attr('stroke', 'grey')
                     .style('stroke-width', '1px');
 
                 legend
                     .selectAll(null)
                     .data(["Asia", "Africa", "SouthAmerica", "Europe", "NorthAmerica", "Oceania", "Unknown"])
+                    .enter()
+                    .append('text')
+                    .text(d => d)
+                    .attr('x', labelHeight * 1.2)
+                    .attr('y', (_, i) => labelHeight * i * 1.8 + labelHeight)
+                    .style('font-family', 'sans-serif')
+                    .style('font-size', `${labelHeight}px`);
+            }
+
+        }
+
+        // Affirmative/Defensive pie chart renderer
+        const renderPieChart1 = data => {
+
+            // Creating Pie generator
+            const pie = d3.pie().sort(null);
+
+            // Creating arc
+            const arc = d3.arc()
+                .innerRadius(pieInnerRadius)
+                .outerRadius(pieOuterRadius);
+
+            const path = pieChart1.selectAll("path")
+                .data(pie(data));
+
+            const pathEnter = path.enter().append("path")
+                .attr("fill", (_, i) => d3.schemeSet3[i])
+                .attr("d", arc);
+
+            const pathUpdate = path.attr("d", arc);
+
+            // Legend
+            if (d3.select("#pie_chart_legend_1").empty()) {
+                const labelHeight = 14;
+                const legend = pieChart1.append('g')
+                    .attr("id", "pie_chart_legend_1")
+                    .attr('transform', `translate(${pieOuterRadius + 15},${-pieOuterRadius * 0.8})`);
+
+                legend
+                    .selectAll(null)
+                    .data(pie(data))
+                    .enter()
+                    .append('rect')
+                    .attr('y', (_, i) => labelHeight * i * 1.8)
+                    .attr('width', labelHeight)
+                    .attr('height', labelHeight)
+                    .attr('fill', (_, i) => d3.schemeSet3[i])
+                    .attr('stroke', 'grey')
+                    .style('stroke-width', '1px');
+
+                legend
+                    .selectAll(null)
+                    .data(["Affirmative", "Defensive"])
                     .enter()
                     .append('text')
                     .text(d => d)
@@ -327,6 +390,7 @@
             renderPieChart(
                 [d.Asia, d.Africa, d.SouthAmerica, d.Europe, d.NorthAmerica, d.Oceania, d.Unknown]
             );
+            renderPieChart1([d.Affirmative, d.Defensive]);
         }
 
         const updateScene = (i = undefined) => {
