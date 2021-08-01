@@ -90,21 +90,7 @@
         </div>
         <div class="row">
             <div class="col" id="chart"></div>
-            <div class="col-sm" id="text-container">
-                <div id="text">
-                    <p>Every year people come to the United States seeking
-                        protection because they have suffered persecution or fear
-                        that they will suffer persecution due to:
-                    </p>
-                    <ul>
-                        <li>Race</li>
-                        <li>Religion</li>
-                        <li>Nationality</li>
-                        <li>Membership in a particular social group</li>
-                        <li>Political opinion</li>
-                    </ul>
-                </div>
-            </div>
+            <div class="col-sm" id="pie-chart"></div>
         </div>
     </div>
     <script>
@@ -134,7 +120,7 @@
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const popup = d3.select("#popup")
+        const pieChart = d3.select("#pie-chart")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -154,14 +140,6 @@
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        // Controller functions
-        const overlayOn = () => {
-            d3.select("#overlay").style("display", "block")
-        }
-        const overlayOff = () => {
-            d3.select("#overlay").style("display", "none");
-        }
-
         // Chart rendering functions
         const renderChart = data => {
 
@@ -178,6 +156,34 @@
                 )
 
         };
+
+    const renderPieChart = data => {
+
+        const g = pieChart.append("g")
+               .attr("transform", "translate(150,120)");
+
+        // Creating Pie generator
+        const pie = d3.pie();
+
+        // Creating arc
+        const arc = d3.arc()
+            .innerRadius(0)
+            .outerRadius(100);
+
+        // Grouping different arcs
+        const arcs = g.selectAll("arc")
+            .data(pie(data))
+            .enter()
+            .append("g");
+
+        // Appending path 
+        arcs.append("path")
+            .attr("fill", (data, i) => {
+                let value = data.data;
+                return d3.schemeSet3[i];
+            })
+            .attr("d", arc);
+    }
 
         // Update display elements by scene parameter
 
@@ -233,6 +239,7 @@
             updateText();
             updateActiveYear();
             updateChart();
+            renderPieChart([7, 31, 9, 22, 5, 12]);
         }
 
         // Button callbacks
