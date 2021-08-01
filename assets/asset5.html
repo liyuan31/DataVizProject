@@ -99,7 +99,7 @@
 
         const nScene = 5;
 
-        let scene = 5;
+        let scene = 1;
 
         let newestActiveYear = 1989;
 
@@ -142,6 +142,9 @@
             .range([height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y));
+
+        svg.append("g").append("text").text("# of Granted Asylum Cases")
+            .attr("transform", "translate(-45,250) rotate(-90)")
 
         const annotation = svg.append("g");
 
@@ -230,7 +233,7 @@
                     "back, but so was",
                     "denied cases. The",
                     "approval rate",
-                    "stayed unchanged."],
+                    "even decreased."],
                     xShift : 490,
                     yShift : 230,
                     w : 118,
@@ -293,26 +296,6 @@
                     }
                 }
             }
-
-            // annotation.selectAll("text").remove();
-            // annotation.selectAll("text").data(text).enter().merge(annotation)
-            //     .append("text")
-            //         .attr("x", 5 + xShift)
-            //         .attr("y", (_,i) => 5 + i*15 + yShift)
-            //         .style("font-size", "10pt")
-            //         .text(d => d)
-            //         .transition().duration(1000);
-            // annotation.exit().remove();
-            // // Text box
-            // annotation.selectAll("rect").remove();
-            // annotation.append("rect")
-            //     .attr("x", xShift)
-            //     .attr("y", yShift - 12)
-            //     .attr("width", w)
-            //     .attr("height", h)
-            //     .attr("fill", "transparent")
-            //     .attr("stroke", "#F85797")
-            //     .attr("stroke-width", "2px")
         }
 
         const updateBtn = () => {
