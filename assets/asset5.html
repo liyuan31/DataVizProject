@@ -146,11 +146,11 @@
                 .data(pie(data));
 
             const pathEnter = path.enter().append("path")
-                .attr("fill", (_,i) => d3.schemeSet3[i])
+                .attr("fill", (_, i) => d3.schemeSet3[i])
                 .attr("d", arc);
 
             const pathUpdate = path.attr("d", arc);
-        
+
         }
 
         // Update display elements by scene parameter
@@ -158,53 +158,53 @@
         const updateText = () => {
             const text = [
                 {
-                    text : ["Every year people come to the United States",
-                    "seeking protectionbecause they have suffered",
-                    "persecution or fear that they will suffer persecution"],
-                    xShift : 10,
-                    yShift : 10,
-                    w : 300,
-                    h : 55
+                    text: ["Every year people come to the United States",
+                        "seeking protectionbecause they have suffered",
+                        "persecution or fear that they will suffer persecution"],
+                    xShift: 10,
+                    yShift: 10,
+                    w: 300,
+                    h: 55
                 },
                 {
-                    text : ["From 1990 to 2001, annual",
-                    "asylum granted cases was",
-                    "steadily increasing."],
-                    xShift : 20,
-                    yShift : 60,
-                    w : 165,
-                    h : 55
+                    text: ["From 1990 to 2001, annual",
+                        "asylum granted cases was",
+                        "steadily increasing."],
+                    xShift: 20,
+                    yShift: 60,
+                    w: 165,
+                    h: 55
                 },
                 {
-                    text : ["After 9-11, asylum",
-                    "admission drastically",
-                    "decrased."],
-                    xShift : 180,
-                    yShift : 200,
-                    w : 130,
-                    h : 55
+                    text: ["After 9-11, asylum",
+                        "admission drastically",
+                        "decrased."],
+                    xShift: 180,
+                    yShift: 200,
+                    w: 130,
+                    h: 55
                 },
                 {
-                    text : ["During Obama administration,",
-                    "number of total granted cases",
-                    "stabilized."],
-                    xShift : 330,
-                    yShift : 100,
-                    w : 180,
-                    h : 55,
+                    text: ["During Obama administration,",
+                        "number of total granted cases",
+                        "stabilized."],
+                    xShift: 330,
+                    yShift: 100,
+                    w: 180,
+                    h: 55,
                 },
                 {
-                    text : ["In Trump Era,",
-                    "granted asylum",
-                    "cases rallied",
-                    "back, but so was",
-                    "denied cases. The",
-                    "approval rate",
-                    "even decreased."],
-                    xShift : 490,
-                    yShift : 230,
-                    w : 118,
-                    h : 114,
+                    text: ["In Trump Era,",
+                        "granted asylum",
+                        "cases rallied",
+                        "back, but so was",
+                        "denied cases. The",
+                        "approval rate",
+                        "even decreased."],
+                    xShift: 490,
+                    yShift: 230,
+                    w: 118,
+                    h: 114,
                 }
             ]
 
@@ -219,11 +219,11 @@
                 // add text
                 g.selectAll("text").data(text[0].text).enter()
                     .append("text")
-                        .attr("x", 5 + text[0].xShift)
-                        .attr("y", (_,i) => 5 + i*15 + text[0].yShift)
-                        .style("font-size", "10pt")
-                        .text(d => d)
-                        .transition().duration(1000);
+                    .attr("x", 5 + text[0].xShift)
+                    .attr("y", (_, i) => 5 + i * 15 + text[0].yShift)
+                    .style("font-size", "10pt")
+                    .text(d => d)
+                    .transition().duration(1000);
                 // add textbox
                 g.append("rect")
                     .attr("x", text[0].xShift)
@@ -244,19 +244,19 @@
                             .attr("class", "anno")
                             .attr("id", `anno_${si}`);
                         // add text
-                        g.selectAll("text").data(text[si-1].text).enter()
+                        g.selectAll("text").data(text[si - 1].text).enter()
                             .append("text")
-                                .attr("x", 5 + text[si-1].xShift)
-                                .attr("y", (_,i) => 5 + i*15 + text[si-1].yShift)
-                                .style("font-size", "10pt")
-                                .text(d => d)
-                                .transition().duration(1000);
+                            .attr("x", 5 + text[si - 1].xShift)
+                            .attr("y", (_, i) => 5 + i * 15 + text[si - 1].yShift)
+                            .style("font-size", "10pt")
+                            .text(d => d)
+                            .transition().duration(1000);
                         // add textbox
                         g.append("rect")
-                            .attr("x", text[si-1].xShift)
-                            .attr("y", text[si-1].yShift - 12)
-                            .attr("width", text[si-1].w)
-                            .attr("height", text[si-1].h)
+                            .attr("x", text[si - 1].xShift)
+                            .attr("y", text[si - 1].yShift - 12)
+                            .attr("width", text[si - 1].w)
+                            .attr("height", text[si - 1].h)
                             .attr("fill", "transparent")
                             .attr("stroke", "#F85797")
                             .attr("stroke-width", "2px");
@@ -291,9 +291,9 @@
         }
 
         const updatePieChart = () => {
-            const d = data[currentActiveYear-1990];
+            const d = data[currentActiveYear - 1990];
             renderPieChart(
-                [d.Asia,d.Africa,d.SouthAmerica,d.Europe,d.NorthAmerica,d.Oceania,d.Unknown]
+                [d.Asia, d.Africa, d.SouthAmerica, d.Europe, d.NorthAmerica, d.Oceania, d.Unknown]
             );
         }
 
