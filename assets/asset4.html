@@ -143,6 +143,8 @@
         svg.append("g")
             .call(d3.axisLeft(y));
 
+        const annotation = svg.append("g");
+
         // Chart rendering functions
         const renderChart = data => {
 
@@ -184,21 +186,39 @@
         // Update display elements by scene parameter
 
         const updateText = () => {
-            d3.select("#text").remove();
-            text = d3.select("#text-container").append("div").attr("id", "text");
+            let text = [];
+            let xShift, yShift;
+            let w, h;
             if (scene === 1) {
-                text.append("p")
-                    .html("Every year people come to the United States seeking protection because they have suffered persecution or fear that they will suffer persecution due to:");
-                const ul = text.append("ul");
-                ul.selectAll("li").data(["Race", "Religion", "Nationality",
-                    "Membership in a particular social group",
-                    "Political opinion"])
-                    .enter().append("li")
-                    .html(d => d)
+                text = ["Every year people come to the United States",
+                "seeking protectionbecause they have suffered",
+                "persecution or fear that they will suffer persecution"]
+                xShift = 10;
+                yShift = 10;
+                w = 300;
+                h = 55;
+            } else if (scene === 2) {
+                text = ["Every year people come to the United States",
+                "seeking protectionbecause they have suffered persecution",
+                "or fear that they will suffer persecution"]
             }
-            if (scene === 2) {
-                text.remove();
-            }
+            annotation.selectAll("text").remove();
+            annotation.selectAll("text").data(text).enter().merge(annotation)
+                .append("text")
+                    .attr("x", 5 + xShift)
+                    .attr("y", (_,i) => 5 + i*15 + yShift)
+                    .style("font-size", "10pt")
+                    .text(d => d)
+                    .transition().duration(1000);
+            annotation.exit().remove();
+            // Text box
+            annotation.append("rect")
+                .attr("x", xShift)
+                .attr("y", yShift - 12)
+                .attr("width", w)
+                .attr("height", h)
+                .attr("fill", "transparent")
+                .attr("stroke", "pink")
         }
 
         const updateBtn = () => {
@@ -210,7 +230,7 @@
 
         const updateActiveYear = () => {
             if (scene === 1) {
-                newestActiveYear = 1989;
+                newestActiveYear = 2001;
             } else if (scene === 2) {
                 newestActiveYear = 2001;
             } else if (scene === 3) {
@@ -334,16 +354,10 @@
             d3.select("#title").select("h2").html("Loading data ...");
             data = await d3.csv("https://raw.githubusercontent.com/liyuan31/DataVizProject/master/data/asylum_90_to_19.csv");
             d3.select("#title").select("h2").html(titleText);
+            updateScene();
         }
 
         main();
-
-        setTimeout(() => {
-            if (scene === 1) {
-                scene++;
-                updateScene();
-            }
-        }, 3000);
 
     </script>
 
