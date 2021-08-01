@@ -157,7 +157,7 @@
                 .data(pie(data));
 
             const pathEnter = path.enter().append("path")
-                .attr("fill", (_, i) => d3.schemeSet3[i])
+                .attr("fill", (_, i) => d3.schemeSet1[i])
                 .attr("d", arc);
 
             const pathUpdate = path.attr("d", arc);
@@ -177,7 +177,7 @@
                     .attr('y', (_, i) => labelHeight * i * 1.8)
                     .attr('width', labelHeight)
                     .attr('height', labelHeight)
-                    .attr('fill', (_, i) => d3.schemeSet3[i])
+                    .attr('fill', (_, i) => d3.schemeSet1[i])
                     .attr('stroke', 'grey')
                     .style('stroke-width', '1px');
 
@@ -210,7 +210,7 @@
                 .data(pie(data));
 
             const pathEnter = path.enter().append("path")
-                .attr("fill", (_, i) => d3.schemeSet3[i])
+                .attr("fill", (_, i) => d3.schemeSet2[i])
                 .attr("d", arc);
 
             const pathUpdate = path.attr("d", arc);
@@ -230,7 +230,7 @@
                     .attr('y', (_, i) => labelHeight * i * 1.8)
                     .attr('width', labelHeight)
                     .attr('height', labelHeight)
-                    .attr('fill', (_, i) => d3.schemeSet3[i])
+                    .attr('fill', (_, i) => d3.schemeSet2[i])
                     .attr('stroke', 'grey')
                     .style('stroke-width', '1px');
 
