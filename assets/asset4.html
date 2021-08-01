@@ -103,6 +103,7 @@
 
         let newestActiveYear = 1989;
 
+        let currentActiveYear = 1989;
 
         let data;
 
@@ -229,8 +230,11 @@
             renderChart(data.filter(d => d.Year <= newestActiveYear));
         }
 
-        const updatePieChart = (year) => {
-            renderPieChart()
+        const updatePieChart = () => {
+            const d = data[currentActiveYear-1990];
+            renderPieChart(
+                [d.Africa, d.Asia, d.NorthAmerica]
+            );
         }
 
         const updateScene = (i = undefined) => {
