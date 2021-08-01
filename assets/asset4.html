@@ -163,26 +163,22 @@
         const renderPieChart = data => {
 
             // Creating Pie generator
-            const pie = d3.pie();
+            const pie = d3.pie().sort(null);
 
             // Creating arc
             const arc = d3.arc()
                 .innerRadius(pieInnerRadius)
                 .outerRadius(pieOuterRadius);
 
-            // Grouping different arcs
-            const arcs = pieChart.selectAll("arc")
-                .data(pie(data))
-                .enter()
-                .append("g");
+            const path = pieChart.selectAll("path")
+                .data(pie(data));
 
-            // Appending path 
-            arcs.append("path")
-                .attr("fill", (data, i) => {
-                    let value = data.data;
-                    return d3.schemeSet3[i];
-                })
-                .attr("d", arc)
+            const pathEnter = path.enter().append("path")
+                .attr("fill", (_,i) => d3.schemeSet3[i])
+                .attr("d", arc);
+
+            const pathUpdate = path.attr("d", arc);
+        
         }
 
         // Update display elements by scene parameter
