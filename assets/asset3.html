@@ -219,15 +219,6 @@
         }
 
         const updateChart = () => {
-            // if (scene === 2) {
-            //     renderChart(data.filter(d => d.Year < 2002));
-            // } else if (scene === 3) {
-            //     renderChart(data.filter(d => d.Year < 2011));
-            // } else if (scene === 4) {
-            //     renderChart(data.filter(d => d.Year < 2017));
-            // } else if (scene === 5) {
-            //     renderChart(data);
-            // }
             renderChart(data.filter(d => d.Year <= newestActiveYear));
         }
 
