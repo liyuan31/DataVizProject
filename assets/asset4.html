@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <!-- D3 -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        #overlay {
+            position: fixed;
+            /* Sit on top of the page content */
+            display: none;
+            /* Hidden by default */
+            width: 100%;
+            /* Full width (cover the whole page) */
+            height: 100%;
+            /* Full height (cover the whole page) */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Black background with opacity */
+            z-index: 2;
+            /* Specify a stack order in case you're using a different order for other elements */
+            cursor: pointer;
+            /* Add a pointer on hover */
+        }
+
+        .tooltip-overlay {
+            fill: none;
+            pointer-events: all;
+        }
+
+        .focus circle {
+            fill: steelblue;
+        }
+
+        .focus text {
+            font-size: 14px;
+        }
+
+        .tooltip {
+            fill: white;
+            stroke: #000;
+        }
+
+        .tooltip-year,
+        .tooltip-value {
+            font-weight: bold;
+        }
+    </style>
+    <title></title>
+</head>
+
+<body>
+    <div id="overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col" style="text-align: center;">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="overlayOff()">Go Back</button>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="row" id="popup"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col" id="title">
+                <h2></h2>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button type="button" id="btn_previous" class="btn btn-light" onclick="previousScene()">&lt;</button>
+            <button type="button" id="s_1" class="btn btn-dark" onclick="updateScene(1)">1</button>
+            <button type="button" id="s_2" class="btn btn-light" onclick="updateScene(2)">2</button>
+            <button type="button" id="s_3" class="btn btn-light" onclick="updateScene(3)">3</button>
+            <button type="button" id="s_4" class="btn btn-light" onclick="updateScene(4)">4</button>
+            <button type="button" id="s_5" class="btn btn-light" onclick="updateScene(5)">5</button>
+            <button type="button" id="s_6" class="btn btn-light" onclick="updateScene(6)">6</button>
+            <button type="button" id="btn_next" class="btn btn-light" onclick="nextScene()">&gt;</button>
+        </div>
+        <div class="row">
+            <div class="col" id="chart"></div>
+            <div class="col-sm" id="text-container">
+                <div id="text">
+                    <p>Every year people come to the United States seeking
+                        protection because they have suffered persecution or fear
+                        that they will suffer persecution due to:
+                    </p>
+                    <ul>
+                        <li>Race</li>
+                        <li>Religion</li>
+                        <li>Nationality</li>
+                        <li>Membership in a particular social group</li>
+                        <li>Political opinion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        const titleText = "30 Years of Asylum in the United States";
+
+        const nScene = 6;
+
+        let scene = 1;
+
+        let newestActiveYear = 1989;
+
+        let newestActiveYearIndex = newestActiveYear - 1990;
+
+        let data;
+
+
+        // Create chart and d3 selections
+        const margin = { top: 30, right: 60, bottom: 30, left: 60 },
+            width = 700 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+
+        const svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const popup = d3.select("#popup")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleLinear()
+            .domain([1990, 2019])
+            .range([0, width]);
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x));
+
+        const y = d3.scaleLinear()
+            .domain([0, 50000])
+            .range([height, 0]);
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+        // Controller functions
+        const overlayOn = () => {
+            d3.select("#overlay").style("display", "block")
+        }
+        const overlayOff = () => {
+            d3.select("#overlay").style("display", "none");
+        }
+
+        // Chart rendering functions
+        const renderChart = data => {
+
+            const line = svg.selectAll(".line").data([data]);
+            line.join("path")
+                .transition().duration(1000)
+                .attr("class", "line")
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 1.5)
+                .attr("d", d3.line()
+                    .x(d => x(d.Year))
+                    .y(d => y(d.Total))
+                )
+
+        };
+
+        // Update display elements by scene parameter
+
+        const updateText = () => {
+            d3.select("#text").remove();
+            text = d3.select("#text-container").append("div").attr("id", "text");
+            if (scene === 1) {
+                text.append("p")
+                    .html("Every year people come to the United States seeking protection because they have suffered persecution or fear that they will suffer persecution due to:");
+                const ul = text.append("ul");
+                ul.selectAll("li").data(["Race", "Religion", "Nationality",
+                    "Membership in a particular social group",
+                    "Political opinion"])
+                    .enter().append("li")
+                    .html(d => d)
+            }
+            if (scene === 2) {
+                text.remove();
+            }
+        }
+
+        const updateBtn = () => {
+            // Make previous scene button light
+            d3.selectAll(".btn-dark").attr("class", "btn btn-light");
+            // Make current scene button dark
+            d3.select(`#s_${scene}`).attr("class", "btn btn-dark");
+        };
+
+        const updateActiveYear = () => {
+            if (scene === 2) {
+                newestActiveYear = 2001;
+            } else if (scene === 3) {
+                newestActiveYear = 2008;
+            } else if (scene === 4) {
+                newestActiveYear = 2020;
+            }
+            newestActiveYearIndex = newestActiveYear - 1990;
+        }
+
+        const updateChart = () => {
+            renderChart(data.filter(d => d.Year <= newestActiveYear));
+        }
+
+        const updateScene = (i = undefined) => {
+            if (i !== undefined) {
+                scene = i;
+            }
+            updateBtn();
+            updateText();
+            updateActiveYear();
+            updateChart();
+        }
+
+        // Button callbacks
+        const nextScene = () => {
+            if (scene < nScene) {
+                scene++;
+                updateScene();
+            }
+        }
+
+        const previousScene = () => {
+            if (scene > 1) {
+                scene--;
+                updateScene();
+            }
+        }
+
+        // Tooltip
+        const focus = svg.append("g")
+            .attr("class", "focus")
+            .style("display", "none");
+
+        focus.append("circle")
+            .attr("r", 5);
+
+        focus.append("rect")
+            .attr("class", "tooltip")
+            .attr("width", 100)
+            .attr("height", 50)
+            .attr("x", 10)
+            .attr("y", -22)
+            .attr("rx", 4)
+            .attr("ry", 4);
+
+        focus.append("text")
+            .attr("class", "tooltip-year")
+            .attr("x", -18)
+            .attr("y", -34);
+
+        focus.append("text")
+            .attr("x", -18)
+            .attr("y", -14)
+            .text("Total Granted:");
+
+        focus.append("text")
+            .attr("class", "tooltip-value")
+            .attr("x", 70)
+            .attr("y", -14);
+
+        svg.append("rect")
+            .attr("class", "tooltip-overlay")
+            .attr("width", width)
+            .attr("height", height)
+            .on("mouseover", () => focus.style("display", null) )
+            .on("mouseout", () => focus.style("display", "none") )
+            .on("mousemove", mousemove);
+
+        const bisectYear = d3.bisector(d => d.Year).left;
+        function mousemove(e) {
+            const x0 = x.invert(d3.pointer(e)[0]),
+                i = bisectYear(data, x0, 1),
+                d0 = data[i - 1],
+                d1 = data[i],
+                d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
+            
+            if (d.Year > newestActiveYear) {
+                focus.style("display", "none");
+                return 0;
+            }
+
+            const transX = (year) => {
+                if (year < 2017) return x(year);
+                else return x(year) - 80;
+            }
+            focus.select("circle").attr("transform", `translate(${x(d.Year)},${y(d.Total)})`);
+            focus.selectAll("text").attr("transform", `translate(${transX(d.Year)},${y(d.Total)})`);
+            focus.select(".tooltip-year").text(d.Year);
+            focus.select(".tooltip-value").text(d.Total);
+        }
+
+
+
+
+
+
+
+        async function main() {
+            d3.select("#title").select("h2").html("Loading data ...");
+            data = await d3.csv("https://raw.githubusercontent.com/liyuan31/DataVizProject/master/data/asylum_90_to_19.csv");
+            d3.select("#title").select("h2").html(titleText);
+        }
+
+        main();
+
+        setTimeout(() => {
+            if (scene === 1) {
+                scene++;
+                updateScene();
+            }
+        }, 3000);
+
+    </script>
+
+</body>
+
+</html>
