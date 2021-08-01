@@ -198,27 +198,90 @@
                 w = 300;
                 h = 55;
             } else if (scene === 2) {
-                text = ["Every year people come to the United States",
-                "seeking protectionbecause they have suffered persecution",
-                "or fear that they will suffer persecution"]
+                text = ["From 1990 to 2001, annual",
+                "asylum granted cases",
+                "steadily increased"]
+                xShift = 20;
+                yShift = 60;
+                w = 165;
+                h = 55;
             }
-            annotation.selectAll("text").remove();
-            annotation.selectAll("text").data(text).enter().merge(annotation)
-                .append("text")
-                    .attr("x", 5 + xShift)
-                    .attr("y", (_,i) => 5 + i*15 + yShift)
-                    .style("font-size", "10pt")
-                    .text(d => d)
-                    .transition().duration(1000);
-            annotation.exit().remove();
-            // Text box
-            annotation.append("rect")
-                .attr("x", xShift)
-                .attr("y", yShift - 12)
-                .attr("width", w)
-                .attr("height", h)
-                .attr("fill", "transparent")
-                .attr("stroke", "pink")
+
+            if (scene === 1) {
+                // If the scene is the first scene (either when initialization
+                // or when going back), clear all annotations and add the one
+                // for the first scene.
+                d3.selectAll(".anno").remove();
+                const g = annotation.append("g")
+                    .attr("class", "anno")
+                    .attr("id", `anno_${scene}`);
+                // add text
+                g.selectAll("text").data(text).enter()
+                    .append("text")
+                        .attr("x", 5 + xShift)
+                        .attr("y", (_,i) => 5 + i*15 + yShift)
+                        .style("font-size", "10pt")
+                        .text(d => d)
+                        .transition().duration(1000);
+                // add textbox
+                g.append("rect")
+                    .attr("x", xShift)
+                    .attr("y", yShift - 12)
+                    .attr("width", w)
+                    .attr("height", h)
+                    .attr("fill", "transparent")
+                    .attr("stroke", "#F85797")
+                    .attr("stroke-width", "2px");
+            } else {
+                // If the scene is not the first scene, remove annotation of the
+                // first scene
+                d3.select("#anno_1").remove();
+                // Append annotations based on current scene number
+                for (let i = scene; i > 1; i--) {
+                    if (d3.select(`#anno_${scene}`).empty()) {
+                        const g = annotation.append("g")
+                            .attr("class", "anno")
+                            .attr("id", `anno_${scene}`);
+                        // add text
+                        g.selectAll("text").data(text).enter()
+                            .append("text")
+                                .attr("x", 5 + xShift)
+                                .attr("y", (_,i) => 5 + i*15 + yShift)
+                                .style("font-size", "10pt")
+                                .text(d => d)
+                                .transition().duration(1000);
+                        // add textbox
+                        g.append("rect")
+                            .attr("x", xShift)
+                            .attr("y", yShift - 12)
+                            .attr("width", w)
+                            .attr("height", h)
+                            .attr("fill", "transparent")
+                            .attr("stroke", "#F85797")
+                            .attr("stroke-width", "2px");
+                    }
+                }
+            }
+
+            // annotation.selectAll("text").remove();
+            // annotation.selectAll("text").data(text).enter().merge(annotation)
+            //     .append("text")
+            //         .attr("x", 5 + xShift)
+            //         .attr("y", (_,i) => 5 + i*15 + yShift)
+            //         .style("font-size", "10pt")
+            //         .text(d => d)
+            //         .transition().duration(1000);
+            // annotation.exit().remove();
+            // // Text box
+            // annotation.selectAll("rect").remove();
+            // annotation.append("rect")
+            //     .attr("x", xShift)
+            //     .attr("y", yShift - 12)
+            //     .attr("width", w)
+            //     .attr("height", h)
+            //     .attr("fill", "transparent")
+            //     .attr("stroke", "#F85797")
+            //     .attr("stroke-width", "2px")
         }
 
         const updateBtn = () => {
