@@ -13,27 +13,6 @@
     <!-- D3 -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        #overlay {
-            position: fixed;
-            /* Sit on top of the page content */
-            display: none;
-            /* Hidden by default */
-            width: 100%;
-            /* Full width (cover the whole page) */
-            height: 100%;
-            /* Full height (cover the whole page) */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            /* Black background with opacity */
-            z-index: 2;
-            /* Specify a stack order in case you're using a different order for other elements */
-            cursor: pointer;
-            /* Add a pointer on hover */
-        }
-
         .tooltip-overlay {
             fill: none;
             pointer-events: all;
@@ -61,18 +40,6 @@
 </head>
 
 <body>
-    <div id="overlay">
-        <div class="container">
-            <div class="row">
-                <div class="col"></div>
-                <div class="col" style="text-align: center;">
-                    <button type="button" class="btn btn-primary btn-lg" onclick="overlayOff()">Go Back</button>
-                </div>
-                <div class="col"></div>
-            </div>
-            <div class="row" id="popup"></div>
-        </div>
-    </div>
     <div class="container">
         <div class="row">
             <div class="col" id="title">
