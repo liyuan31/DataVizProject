@@ -20,3 +20,12 @@
 .tooltip-value {
     font-weight: bold;
 }
+
+.button {
+    transition: border 0.2s ease;
+  }
+
+.button:hover {
+    border: 1px solid black;
+    cursor: pointer;
+  }
