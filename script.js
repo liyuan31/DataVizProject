@@ -202,7 +202,7 @@ const updateText = () => {
     const text = [
         {
             text: ["Every year people come to the United States",
-                "seeking protectionbecause they have suffered",
+                "seeking protection because they have suffered",
                 "persecution or fear that they will suffer persecution"],
             xShift: 10,
             yShift: 10,
