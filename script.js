@@ -243,7 +243,7 @@ const updateText = () => {
                 "back, but so was",
                 "denied cases. The",
                 "approval rate",
-                "even decreased."],
+                "actually dropped."],
             xShift: 490,
             yShift: 230,
             w: 118,
